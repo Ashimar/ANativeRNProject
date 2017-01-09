@@ -12,6 +12,9 @@ import {
   RefreshControl,
 } from 'react-native';
 
+import SwiperView from '../view/SwiperView';          // 图片轮播
+import TimerRollPage from '../view/TimerRollPage.js'; // 计时器
+
 var ScreenWidth = Dimensions.get('window').width;
 var sectionName = ['第一个section','第二个section'];
 export default class FactoryPage extends Component {
@@ -23,7 +26,7 @@ export default class FactoryPage extends Component {
             sectionHeaderHasChanged: (s1, s2) => s1 !== s2
           }
       );
-    
+
     this.state = {
       dataSource: ds,
       data:{a:['aa','ab'],b:['bb','bc'],c:['cb','cc']},
@@ -44,20 +47,20 @@ export default class FactoryPage extends Component {
 
     // if (sectionID === 'AAA') {
       return (
-      
+
         <View style={styles.rowView}>
           <Text style={styles.rowText}>{rowData+ '   ' + rowID+'   '+ sectionID}</Text>
         </View>
-      
+
       );
     // }
 
-    
+
   }
 
   _renderSectionHeader(sectionData,sectionId){
     return (
-      <View style={{backgroundColor:'orange',height:30,}}>
+      <View style={{height:30,}}>
         <Text>{'我是ListView 的 第' + sectionId +'个section'}</Text>
       </View>
     );
@@ -65,8 +68,9 @@ export default class FactoryPage extends Component {
 
   _renderHeader(sectionData,sectionId){
     return (
-      <View style={{backgroundColor:'pink',height:50,}}>
-        <Text>ListView 的表头</Text>
+      <View >
+        <SwiperView />
+        <TimerRollPage />
       </View>
 
     );
@@ -85,52 +89,53 @@ export default class FactoryPage extends Component {
 
   render (){
     // 导航栏 的设置
-    let navigationBar = 
+    let navigationBar =
       <View style = {styles.navigatorbgView}>
         <View style={{height:20}}/>
         <View style={styles.navigationbar}>
-          <Button 
+          <Button
             onPress = {() => this.selectCity()}
             title = '正在定位'
-            color = 'black' 
+            color = 'black'
             style = {styles.leftButton}
           />
           <TextInput
             style = {styles.textInputStyle}
             placeholder = "请输入"
+            placeholderTextColor = '#9d9ca2'
             onSubmitEditing={event => alert(event.nativeEvent.text)}
             // editable=false
           >
-            <Image source={require('./img/search.png')} style={styles.searchImage}/>
+            {/* <Image source={require('./img/search.png')} style={styles.searchImage}/> */}
           </TextInput>
-          
+
         </View>
       </View>;
 
+    let listView = <ListView
+       dataSource={this.state.dataSource.cloneWithRowsAndSections(this.state.data)}
+       removeClippedSubviews = {false}
+       renderRow={(rowData,sectionID,rowId) => this._renderRow(rowData,sectionID,rowId)}
+       renderSectionHeader={(sectionData,sectionId) => this._renderSectionHeader(sectionData,sectionId)}
+       renderHeader={(sectionData,sectionId) => this._renderHeader(sectionData,sectionId)}
+       renderFooter={this._renderFooter.bind(this)}
+       refreshControl={
+         <RefreshControl
+           refreshing={this.state.isRefreshing}
+           // onRefresh={this._onRefresh}
+           tintColor="#ff0000"
+           title="Loading..."
+           colors={['#ff0000', '#00ff00', '#0000ff']}
+           progressBackgroundColor="#ffff00"
+         />
+       }
+       style = {{marginBottom:49}}
+    />;
     return (
       <View style = {styles.container}
         >
        {navigationBar}
-       <ListView
-        dataSource={this.state.dataSource.cloneWithRowsAndSections(this.state.data)}
-        renderRow={(rowData,sectionID,rowId) => this._renderRow(rowData,sectionID,rowId)}
-        renderSectionHeader={(sectionData,sectionId) => this._renderSectionHeader(sectionData,sectionId)}
-        renderHeader={(sectionData,sectionId) => this._renderHeader(sectionData,sectionId)}
-        renderFooter={this._renderFooter.bind(this)}
-        refreshControl={
-          <RefreshControl
-            refreshing={this.state.isRefreshing}
-            // onRefresh={this._onRefresh}
-            tintColor="#ff0000"
-            title="Loading..."
-            colors={['#ff0000', '#00ff00', '#0000ff']}
-            progressBackgroundColor="#ffff00"
-          />
-
-        }
-        
-        >
-       </ListView>
+       {listView}
       </View>
     );
   }
@@ -139,7 +144,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor:'blue',
+    backgroundColor:'white',
   },
 
   navigatorbgView :{
@@ -158,13 +163,13 @@ const styles = StyleSheet.create({
   },
   textInputStyle: {
     flex:5,
-    borderColor:'gray',
-    borderWidth:1,
     height: 30,
     marginTop: 7,
-    marginRight: 18,
-    borderRadius:15,
+    marginRight: 19,
+    borderRadius:5,
     paddingLeft:30,
+    backgroundColor:'#f4f4f7',
+    // alignItems: 'center',
   },
   searchImage:{
     width: 15,
@@ -180,5 +185,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#F6F6F6',
     alignItems: 'center',
     borderColor: '#CCC'
+
   },
 });
