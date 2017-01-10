@@ -6,6 +6,8 @@ import {
   Text,
 } from 'react-native';
 
+import Segmented from 'react-native-tab-navigator'
+
 export default class SegmentedView extends Component {
   constructor() {
     super()
@@ -13,8 +15,11 @@ export default class SegmentedView extends Component {
 
   render (){
     return (
-      <View>
+      <View style = {styles.constainer}>
+        <
+        <View>
 
+        </View>
       </View>
     );
   }
@@ -27,5 +32,6 @@ const styles = StyleSheet.create ({
     borderColor: '#9e9e9e',
     borderWidth: 0.5,
     borderRadius: 10,
+    height:150,
   }
 });

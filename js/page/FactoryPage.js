@@ -14,6 +14,7 @@ import {
 
 import SwiperView from '../view/SwiperView';          // 图片轮播
 import TimerRollPage from '../view/TimerRollPage.js'; // 计时器
+import SegmentedView from '../view/SegmentedView.js';
 
 var ScreenWidth = Dimensions.get('window').width;
 var sectionName = ['第一个section','第二个section'];
@@ -71,6 +72,7 @@ export default class FactoryPage extends Component {
       <View >
         <SwiperView />
         <TimerRollPage />
+        <SegmentedView />
       </View>
 
     );
